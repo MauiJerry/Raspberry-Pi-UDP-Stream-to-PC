@@ -23,6 +23,11 @@ cd udp-image-streaming/
 cmake . && make
 ./server 10000 &
 ./client 127.0.0.1 10000
+
+server alternation:
+./server PORT TYPE-OF-IMAGE-PROCESSING
+./server 10000 0
+./server 10000 1
 ```
 
 You should see two windows, one with the original grabbed image (before encoding) and one with received live-stream image (after encoding/decoding).
