@@ -21,6 +21,9 @@
 #include "PracticalSocket.h" // For UDPSocket and SocketException
 #include <iostream>          // For cout and cerr
 #include <cstdlib>           // For atoi()
+#include <string.h>
+#include <stdio.h>
+
 
 #define BUF_LEN 65540 // Larger than maximum UDP packet size
 
@@ -28,12 +31,24 @@
 using namespace cv;
 #include "config.h"
 
-int main(int argc, char * argv[]) {
+Mat Find_Edges(Mat frame, int thresh);
 
-    if (argc != 2) { // Test for correct number of parameters
+int main(int argc, char * argv[]) {
+    //Custom code
+    Mat croppedImage = cv::Mat::zeros(167, 154, CV_8UC3);
+    Mat CannyFrame;
+    cv::Rect myROI(0, 20, 154, 167);
+    char cannyornaw[1];
+
+
+    if (argc != 3) { // Test for correct number of parameters
+        std::cout << "Remember that you need 1 for Canny 0 for Thermal input!" << std::endl;
         cerr << "Usage: " << argv[0] << " <Server Port>" << endl;
+
         exit(1);
     }
+    // Copies the answer to which view should be displayed
+    strcpy(cannyornaw, argv[2]);
 
     unsigned short servPort = atoi(argv[1]); // First arg:  local port
 
@@ -74,10 +89,23 @@ int main(int argc, char * argv[]) {
                 cerr << "decode failure!" << endl;
                 continue;
             }
-            imshow("recv", frame);
+            // Crop the full image to that image contained by the rectangle myROI
+            // Note that this doesn't copy the data
+            croppedImage = frame(myROI);
+            cv:resize(croppedImage, croppedImage, Size(), 4, 4, INTER_LINEAR);
+            //Place Text
+            CannyFrame = Find_Edges(croppedImage, 25);
+            if (!strcmp(cannyornaw, "1"))
+            {
+                imshow("Canny Thermal", CannyFrame);
+            }
+            else{
+                putText(croppedImage, "Drone Connected", cvPoint(croppedImage.cols * 0.05 ,croppedImage.rows * 0.05), FONT_HERSHEY_DUPLEX, 1, cvScalar(0,250,0), 2, CV_AA);
+                imshow("Thermal Live Stream", croppedImage);
+            }
             free(longbuf);
 
-            waitKey(1);
+            if(cv::waitKey(30) >= 0) break;
             clock_t next_cycle = clock();
             double duration = (next_cycle - last_cycle) / (double) CLOCKS_PER_SEC;
             cout << "\teffective FPS:" << (1 / duration) << " \tkbps:" << (PACK_SIZE * total_pack / duration / 1024 * 8) << endl;
@@ -92,3 +120,35 @@ int main(int argc, char * argv[]) {
 
     return 0;
 }
+
+Mat Find_Edges(Mat frame, int thresh)
+{
+    Mat Thermal_Copy = frame.clone();
+    //Grey scale
+    cvtColor(frame, frame, COLOR_BGR2GRAY);
+    blur( frame, frame, Size(3,3) );
+    
+    Mat canny_output;
+    std::vector<std::vector<Point> > contours;
+    std::vector<Vec4i> hierarchy;
+    
+    /// Detect edges using canny
+    Canny( frame, canny_output, thresh, thresh*2, 3 );
+    
+    /// Find contours
+    findContours( canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+    
+    /// Draw contours
+    Mat drawing = Mat::zeros( canny_output.size(), CV_8UC3 );
+    for( int i = 0; i< contours.size(); i++ )
+    {
+        Scalar color = Scalar( 0, 255, 0 );
+        drawContours( drawing, contours, i, color, 3, 8, hierarchy, 0, Point() );
+    }
+    
+    return drawing;
+}
+
+
+
+        
