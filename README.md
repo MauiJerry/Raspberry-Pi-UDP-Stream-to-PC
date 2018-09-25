@@ -29,8 +29,8 @@ server alternation:
 ./server 10000 0
 ./server 10000 1
 ```
-
-You should see two windows, one with the original grabbed image (before encoding) and one with received live-stream image (after encoding/decoding).
+## Note
+You will need to change the IP of the destination for the UDP stream. At the moment, you will need to re-compile every time the IP changes. So I reccommend making your local IP static on the recieving end.
 
 ## Acknowledgement and Copyright
 This project is built upon various open-sourced libraries, like [Practical C++ Sockets](http://cs.ecs.baylor.edu/~donahoo/practical/CSockets/practical/) and [OpenCV 3](http://opencv.org/) ; please refer to their original license accordingly (GPL/BSD). Code of this project is puslished under MIT License.
