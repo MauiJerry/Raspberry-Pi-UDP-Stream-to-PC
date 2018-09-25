@@ -6,7 +6,7 @@ Parameters such as stream size or quality can be adjusted in `config.h` before r
 
 ## Grabbing
 
-The code grabs video stream from OpenCV's default input video device. To change input source, simply change the argument passed to `cv::VideoCapture()` accordingly.
+The code grabs video stream from a Raspberry Pi that is pushing UDP packets to port 8080 for the machine that you are running this code on.
 
 ## Encoding
 
@@ -18,8 +18,8 @@ If passing raw image is preferred, consider changing `jpeg` to `bmp`.
 
 Run the following command to see stream your camera through localhost: (`CMake` and `OpenCV` required)
 ```
-git clone https://github.com/chenxiaoqino/udp-image-streaming.git
-cd udp-image-streaming/
+git clone https://github.com/pokeastuff/Raspberry-Pi-UDP-Stream-to-PC.git
+cd Raspberry-Pi-UDP-Stream-to-PC/
 cmake . && make
 ./server 10000 &
 ./client 127.0.0.1 10000
