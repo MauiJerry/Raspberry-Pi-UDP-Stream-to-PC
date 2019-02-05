@@ -1,0 +1,28 @@
+IP of Drone = 10.8.0.2
+IP of computer = 10.8.0.3
+
+Must constantly ping drone while using PIC VPN software
+
+Everything should connect automatically on drone side
+
+Must ./pic_monitor start
+then ./pic_monitor check
+
+And you should be good to go. Controls are in DroneFlying(ctrl_...Ubuntu.py)
+- Make sure to have the controller connected before starting
+
+Thermal streaming is in Raspberry-Pi-UDP-Stream-to-PC (./server 1997)
+
+To SSH into the PI. You will need to change the MTU size for the newly created.
+Run this command: sudo ip li set mtu 1200 dev tun1
+
+To stream normal video: Run this command on Pi
+
+raspivid -n -ih -t 0 -rot 180 -w 1280 -h 720 -fps 30 -b 1000000 -o - | nc -lkv4 4600
+
+And run this command on your computer:
+
+nc 10.8.0.2 4600 | mplayer - -fps 30
+
+
+Have fun!
