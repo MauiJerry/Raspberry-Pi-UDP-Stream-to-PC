@@ -4,6 +4,9 @@ This project is inspired by https://www.cs.utexas.edu/~teammco/misc/udp_video/ ,
 
 Parameters such as stream size or quality can be adjusted in `config.h` before re-compile the program.
 
+## Updates
+forked from a fork from a fork, updated to build on rPi Buster with OpenCV 4.5.5.  Required changing some CV_ defines to drop the CV_ (opencv 3.x apparently). Also mod the cmake to remove deprecated warnings about dynamic throw 
+
 ## Grabbing
 
 The code grabs video stream from a Raspberry Pi that is pushing UDP packets to port 8080 for the machine that you are running this code on.
