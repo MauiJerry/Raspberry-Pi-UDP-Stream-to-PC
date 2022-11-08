@@ -65,7 +65,7 @@ int main(int argc, char * argv[]) {
         vector < uchar > encoded;
         int jpegqual =  ENCODE_QUALITY; // Compression Parameter
         vector < int > compression_params;
-        compression_params.push_back(CV_IMWRITE_JPEG_QUALITY);
+        compression_params.push_back(IMWRITE_JPEG_QUALITY);//CV_IMWRITE_JPEG_QUALITY);
         compression_params.push_back(jpegqual);
 
         //namedWindow("recv", CV_WINDOW_AUTOSIZE);
@@ -90,7 +90,7 @@ int main(int argc, char * argv[]) {
             cout << "Received packet from " << sourceAddress << ":" << sourcePort << endl;
  
             Mat rawData = Mat(1, PACK_SIZE * total_pack, CV_8UC1, longbuf);
-            Mat frame = imdecode(rawData, CV_LOAD_IMAGE_COLOR);
+            Mat frame = imdecode(rawData, IMREAD_COLOR);//CV_LOAD_IMAGE_COLOR);
             if (frame.size().width == 0) {
                 cerr << "decode failure!" << endl;
                 continue;
@@ -158,7 +158,9 @@ Mat Find_Edges(Mat frame, int thresh)
     Canny( frame, canny_output, thresh, thresh*1.5, 3 );
     
     /// Find contours
-    findContours( canny_output, contours, hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+    findContours( canny_output, contours, hierarchy, 
+    RETR_TREE, CHAIN_APPROX_SIMPLE, Point(0, 0) );
+    //CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
     
     /// Draw contours
     Mat drawing = Mat::zeros( canny_output.size(), CV_8UC3 );
