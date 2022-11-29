@@ -1,5 +1,7 @@
 # UDP Live Image Streaming
 
+This project is a fork of a fork of a fork. I forked it to see if it would work for rPi to PC streaming. As yet it is untested/modified.
+
 This project is inspired by https://www.cs.utexas.edu/~teammco/misc/udp_video/ , where images are grabbed from camera on one machine and transfered to another machine via UDP, resulting in negligible latency.
 
 Parameters such as stream size or quality can be adjusted in `config.h` before re-compile the program.
